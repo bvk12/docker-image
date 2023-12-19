@@ -24,3 +24,15 @@ sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 # Add the current user to the docker group
 sudo usermod -aG docker $USER
 sudo chmod 666 /var/run/docker.sock
+
+cd /
+
+# Build the Docker image using the Dockerfile in the root directory
+sudo docker build -t apache-app .
+
+# Run a Docker container based on the built image (replace 'your-container-name' with a meaningful name)
+sudo docker run -d --name apache -p 80:80 apache-app
+
+# Print the external IP address of the instance for accessing the container
+EXTERNAL_IP=$(curl -s http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip -H "Metadata-Flavor: Google")
+echo "Docker container is running at: http://${EXTERNAL_IP}"
