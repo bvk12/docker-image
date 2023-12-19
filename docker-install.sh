@@ -46,7 +46,7 @@ echo "Docker container is running at: http://${EXTERNAL_IP}"
 # (Optional) Configure auto-update logic
 while true
 do
-    git -C /tmp/docker-image pull origin main
+    git -C /docker-image pull origin main
     if [ $? -eq 0 ]; then
         # If there are changes in the GitHub repository, update the Docker image and restart the container
         sudo docker stop apache
