@@ -34,23 +34,37 @@ git clone https://github.com/bvk12/docker-image.git /docker-image
 cd /docker-image
 
 # Build the Docker image
-docker build -t apache-app .
+docker build -t apache-app.
 
-# Run a Docker container (replace 'your-container-name' with a meaningful name)
+# Run a Docker container (replace  apache-name' with a meaningful name)
 docker run -d --name apache -p 80:80 apache-app
 
 # Print the external IP address of the instance for accessing the container
 EXTERNAL_IP=$(curl -s http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip -H "Metadata-Flavor: Google")
 echo "Docker container is running at: http://${EXTERNAL_IP}"
 
+# (Optional) Configure auto-update logic
+while true
+do
+    git -C /tmp/docker-image pull origin main
+    if [ $? -eq 0 ]; then
+        # If there are changes in the GitHub repository, update the Docker image and restart the container
+        sudo docker stop apache
+        sudo docker rm apache
+        sudo docker build -t apache-app /docker-image
+        sudo docker run -d --name apache -p 80:80 apache-app
+    fi
+    sleep 60
+done
+
 
 #cd /
 
 # Build the Docker image using the Dockerfile in the root directory
-#sudo docker build -t apache-app .
+#sudo docker build -t apache .
 
-# Run a Docker container based on the built image (replace 'your-container-name' with a meaningful name)
-#sudo docker run -d --name apache -p 80:80 apache-app
+# Run a Docker container based on the built image (replace  apache-name' with a meaningful name)
+#sudo docker run -d --name apache -p 80:80 apache
 
 # Print the external IP address of the instance for accessing the container
 #EXTERNAL_IP=$(curl -s http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip -H "Metadata-Flavor: Google")
