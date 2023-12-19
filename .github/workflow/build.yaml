@@ -32,6 +32,6 @@ jobs:
           docker run -d --name bvk -p 5000:5000 bvkk/python-app
           docker stop bvk
           docker rm bvk
-          echo container deletion is successfull!!!
+          echo container deletion is successfull@!!!
   
       
