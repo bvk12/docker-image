@@ -1,0 +1,37 @@
+name: python code running
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+permissions:
+  contents: read
+
+jobs:
+  Run-npm-on-Ubuntu:
+    if: ${{ success() && contains(github.event.head_commit.message, 'feat:successfull') || contains(github.event.head_commit.message, 'feat') }}
+    name: Run npm on Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: npm help
+      - name: for docker image
+        run: echo this is for to build docker file
+      - name: docker image build
+        run: |
+          chmod +x docker-install.sh
+          bash docker-install.sh
+          docker image build -t bvkk/python-app . --no-cache
+          echo docker image build successfull!!!!!
+          echo container creation is successful!!!
+          docker run -d --name bvk -p 5000:5000 bvkk/python-app
+          docker stop bvk
+          docker rm bvk
+          echo container deletion is successfull!!!
+  
+      
