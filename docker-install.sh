@@ -18,9 +18,3 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin 
 
 sudo chmod +x /var/run/docker.sock
 sudo usermod -aG docker ${user}
-
-# Git install on ubuntu
-
-sudo apt update
-sudo apt install git -y
-git --version
